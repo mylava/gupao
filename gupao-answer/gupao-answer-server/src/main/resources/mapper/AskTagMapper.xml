@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.answer.server.dao.AskTagMapper">
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="findTagList" resultType="com.gupao.edu.answer.server.entity.res.AskTagRes">
+        SELECT
+            id,
+            name,
+            category_id categoryId,
+            logo,
+            summary,
+            description,
+            parent_id parentId,
+            createdAt,
+            updatedAt
+        FROM
+            ask_tags t
+            JOIN ask_taggables a ON t.id = a.tag_id
+        WHERE
+         a.taggable_id = #{taggableId}
+        and a.taggable_type = #{taggableType}
+    </select>
+</mapper>

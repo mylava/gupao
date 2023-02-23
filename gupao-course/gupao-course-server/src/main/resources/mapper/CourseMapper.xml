@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.course.server.mapper.CourseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.course.client.entity.Course">
+        <id column="id" property="id" />
+        <result column="category_id" property="categoryId" />
+        <result column="grade_id" property="gradeId" />
+        <result column="course_name" property="courseName" />
+        <result column="course_title" property="courseTitle" />
+        <result column="image_url" property="imageUrl" />
+        <result column="view_num" property="viewNum" />
+        <result column="study_num" property="studyNum" />
+        <result column="comment_num" property="commentNum" />
+        <result column="attention_num" property="attentionNum" />
+        <result column="praise_num" property="praiseNum" />
+        <result column="total_minutes" property="totalMinutes" />
+        <result column="praise_score" property="praiseScore" />
+        <result column="average_score" property="averageScore" />
+        <result column="reply_count" property="replyCount" />
+        <result column="cost" property="cost" />
+        <result column="price" property="price" />
+        <result column="lecturer_ids" property="lecturerIds" />
+        <result column="description" property="description" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="start_Time" property="startTime" />
+        <result column="endTime" property="endTime" />
+        <result column="putaway_time" property="putawayTime" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, category_id, grade_id, course_name, course_title, image_url, view_num, study_num, comment_num, attention_num, praise_num, total_minutes, praise_score, average_score, reply_count, cost, price, lecturer_ids, description, is_deleted, start_Time, endTime, putaway_time, create_user_id, update_user_id, create_time, update_time
+    </sql>
+    <select id="listCoursePage" resultType="com.gupao.edu.course.client.resp.good.CourseListResp">
+        SELECT * FROM `course` c
+        WHERE c.`category_id` = #{category_id}
+        and c.`grade_id` = #{grade_id}
+    </select>
+</mapper>

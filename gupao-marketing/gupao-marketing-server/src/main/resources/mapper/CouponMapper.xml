@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.marketing.server.mapper.CouponMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.marketing.client.entity.Coupon">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="grade_id" property="gradeId" />
+        <result column="preferential_way" property="preferentialWay" />
+        <result column="range" property="range" />
+        <result column="amount" property="amount" />
+        <result column="send_amount" property="sendAmount" />
+        <result column="valid_date" property="validDate" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="status" property="status" />
+        <result column="issued_way" property="issuedWay" />
+        <result column="creator_id" property="creatorId" />
+        <result column="updater_id" property="updaterId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, description, grade_id, preferential_way, range, amount, send_amount, valid_date, start_time, end_time, status, issued_way, creator_id, updater_id, create_time, update_time
+    </sql>
+
+</mapper>

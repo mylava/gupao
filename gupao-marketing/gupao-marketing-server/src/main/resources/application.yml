@@ -1,0 +1,4 @@
+#使用配置文件
+spring:
+  profiles:
+    active: local

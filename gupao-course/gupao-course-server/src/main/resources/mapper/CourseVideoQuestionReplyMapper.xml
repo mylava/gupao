@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.course.server.mapper.CourseVideoQuestionReplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.course.client.entity.CourseVideoQuestionReply">
+        <id column="id" property="id" />
+        <result column="question_title" property="questionTitle" />
+        <result column="course_video_question_id" property="courseVideoQuestionId" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="praise_count" property="praiseCount" />
+        <result column="negative_count" property="negativeCount" />
+        <result column="office_reply" property="officeReply" />
+        <result column="content" property="content" />
+        <result column="is_adopted" property="isAdopted" />
+        <result column="adopted_time" property="adoptedTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, question_title, course_video_question_id, user_unique_code, praise_count, negative_count, office_reply, content, is_adopted, adopted_time, create_time, update_time
+    </sql>
+    <select id="findReplyRespListByQuestionId"
+        resultType="com.gupao.edu.course.client.resp.center.CourseVedioReplyResp">
+        select
+            id,
+            question_title questionTitle,
+            course_video_question_id courseVideoQuestionId,
+            user_unique_code userUniqueCode,
+            praise_count praiseCount,
+            negative_count negativeCount,
+            office_reply officeReply,
+            content,
+            is_adopted isAdopted,
+            adopted_time adoptedTime,
+            create_time createTime,
+            update_time updateTime
+        from
+            course_video_question_reply
+        where
+            course_video_question_id = #{questionId}
+    </select>
+
+</mapper>

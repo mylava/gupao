@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.server.answer.mapper.AskCommentsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.answer.server.entity.AskComments">
+    <result column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="content" property="content" />
+        <result column="source_id" property="sourceId" />
+        <result column="source_type" property="sourceType" />
+        <result column="to_user_id" property="toUserId" />
+        <result column="status" property="status" />
+        <result column="supports" property="supports" />
+        <result column="device" property="device" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="opt_type" property="optType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        user_id, content, source_id, source_type, to_user_id, status, supports, device, created_at, updated_at, opt_type
+    </sql>
+    <insert id="addComments" parameterType="com.gupao.edu.answer.server.entity.AskComments">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO ask_comments
+        (user_id, content, source_id, source_type, to_user_id, status, supports, device, created_at, updated_at, opt_type)
+        VALUES(#{userId,jdbcType=INTEGER},#{content,jdbcType=CLOB},#{sourceId,jdbcType=INTEGER}, #{sourceType,jdbcType=VARCHAR},  #{toUserId,jdbcType=INTEGER},
+        #{status,jdbcType=TINYINT},0,  #{device,jdbcType=TINYINT},  now(), now(),1);
+    </insert>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" parameterType="com.gupao.edu.answer.server.entity.AskComments"
+            resultMap="BaseResultMap">
+        SELECT t1.id, t1.user_id userId,
+        t1.content, t1.source_id sourceId, t1.source_type sourceType, t1.to_user_id toUserId, t1.status, t1.supports, t1.created_at createdAt
+        FROM ask_comments t1
+        WHERE t1.opt_type = 1
+        <if test="null!=userId ">
+            AND t1.user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="null!=toUserId ">
+            AND t1.to_user_id = #{toUserId,jdbcType=INTEGER}
+        </if>
+        <if test="null!=sourceType and ''!= sourceType">
+            AND t1.source_type = #{sourceType,jdbcType=VARCHAR}
+        </if>
+        <if test="null!=sourceId ">
+            AND t1.source_id = #{sourceId,jdbcType=INTEGER}
+        </if>
+        <if test="null!=content and ''!=content">
+            AND t1.content like "%"#{content,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="null!=startTime and ''!=startTime">
+            <![CDATA[ and DATE_FORMAT(t1.created_at, '%Y-%m-%d')>=  DATE_FORMAT(#{startTime,jdbcType=VARCHAR}, '%Y-%m-%d')   ]]>
+        </if>
+        <if test="null!=endTime and ''!=endTime">
+            <![CDATA[ and DATE_FORMAT(t1.created_at, '%Y-%m-%d') <= DATE_FORMAT(#{endTime,jdbcType=VARCHAR}, '%Y-%m-%d')    ]]>
+        </if>
+        <if test="null == backTrue or false == backTrue">
+            AND t1.status = 1
+        </if>
+        <if test="true == backTrue">
+            <if test="null != status">
+                AND t1.status = #{status,jdbcType=TINYINT}
+            </if>
+        </if>
+        <choose>
+            <when test='orderType == "default"'>
+                ORDER BY t1.supports desc,t1.created_at desc
+            </when>
+            <when test='orderType == "new"'>
+                ORDER BY t1.created_at desc
+            </when>
+            <otherwise>
+                ORDER BY t1.id desc
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

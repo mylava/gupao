@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.account.server.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.account.client.entity.User">
+        <id column="id" property="id" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="email" property="email" />
+        <result column="mobile" property="mobile" />
+        <result column="user_name" property="userName" />
+        <result column="password" property="password" />
+        <result column="avatar" property="avatar" />
+        <result column="nick_name" property="nickName" />
+        <result column="student_no" property="studentNo" />
+        <result column="qq_open_id" property="qqOpenId" />
+        <result column="wechat_union_id" property="wechatUnionId" />
+        <result column="account_state" property="accountState" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_unique_code, email, mobile, user_name, password, avatar, nick_name, student_no, qq_open_id, wechat_union_id, account_state, create_time, update_time
+    </sql>
+
+    <select id="selectByUniqueCode" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+             user
+        WHERE user_unique_code = #{userUniqueCode}
+    </select>
+
+</mapper>

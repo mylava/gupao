@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.order.server.mapper.GoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.order.client.entity.Goods">
+        <id column="id" property="id" />
+        <result column="resource_id" property="resourceId" />
+        <result column="item_name" property="itemName" />
+        <result column="item_img" property="itemImg" />
+        <result column="item_type" property="itemType" />
+        <result column="summary" property="summary" />
+        <result column="description" property="description" />
+        <result column="price_normal" property="priceNormal" />
+        <result column="price_vip" property="priceVip" />
+        <result column="buy_counts" property="buyCounts" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, resource_id, item_name, item_img, item_type, summary, description, price_normal, price_vip, buy_counts, create_time, update_time
+    </sql>
+
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.account.server.mapper.SystemAttentionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.account.client.entity.SystemAttention">
+        <id column="id" property="id" />
+        <result column="type" property="type" />
+        <result column="source_id" property="sourceId" />
+        <result column="subject" property="subject" />
+        <result column="url" property="url" />
+        <result column="content" property="content" />
+        <result column="is_send" property="isSend" />
+        <result column="is_read" property="isRead" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, type, source_id, subject, url, content, is_send, is_read, is_deleted, create_time, update_time
+    </sql>
+
+    <select id="count" resultType="int">
+        select count(*) from user_system_attention ua
+        where ua.user_unique_code = #{userUniqueCode,jdbcType=VARCHAR}
+        AND ua.is_read = #{readStatus,jdbcType=INTEGER}
+        AND ua.is_deleted = 0
+    </select>
+    
+    <select id="listAttentionPage" resultType="com.gupao.edu.account.client.resp.SystemAttentionVO">
+       select
+        t.type as type,
+        dict.dict_value as noticeType,
+        t.source_id as sourceId,
+        t.subject as subject,
+        t.content as content,
+        t.create_time as noticeTime
+        from  system_attention t
+        left join dict dict on dict.category_id=t.type
+        <where>
+            t.id in
+            <foreach item="item" collection="list" separator="," open="(" close=")" index="">
+                #{item, jdbcType=NUMERIC}
+            </foreach>
+        </where>
+
+    </select>
+    <!--<if test="condition.page != null and condition.pageNum != null">-->
+    <!--limit #{condition.page}, #{condition.pageNum}-->
+    <!--</if>-->
+
+</mapper>

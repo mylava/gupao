@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.course.server.mapper.UserCourseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.course.client.entity.UserCourse">
+        <id column="id" property="id" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="order_no" property="orderNo" />
+        <result column="course_id" property="courseId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_unique_code, order_no, course_id, create_time, update_time
+    </sql>
+
+    <select id="listMyCourse" resultType="com.gupao.edu.course.client.resp.center.MyCourseResp">
+        select
+            c.id as courseId,
+            c.category_id as categoryId,
+            c.course_name as courseName,
+            c.image_url as imageUrl,
+            c.view_num as viewNum,
+            c.comment_num as commentNum,
+            c.attention_num as attentionNum,
+            c.cost as cost, c.price as price,
+            c.lecturer_ids as lecturerIds,
+            c.description as description,
+            c.start_Time as startTime,
+            c.endTime as endTime,
+            c.create_time as createTime,
+            c.update_time as updateTime
+        from user_course u
+        join course c on u.course_id = c.id
+        where u.user_unique_code=#{condition.userUniqueCode,jdbcType=VARCHAR}
+        and c.is_deleted=0
+        <if test="condition.pageNum != null and condition.pageSize != null">
+            limit #{condition.pageNum}, #{condition.pageSize}
+        </if>
+    </select>
+
+</mapper>

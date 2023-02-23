@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.order.server.mapper.OrderSupplementMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.order.client.entity.OrderSupplement">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="category_id" property="categoryId" />
+        <result column="course_id" property="courseId" />
+        <result column="recommend_code" property="recommendCode" />
+        <result column="recommend_teacher_id" property="recommendTeacherId" />
+        <result column="recommend_mobile" property="recommendMobile" />
+        <result column="recommend_user_id" property="recommendUserId" />
+        <result column="lecture_id" property="lectureId" />
+        <result column="realize_channel" property="realizeChannel" />
+        <result column="audition_counts" property="auditionCounts" />
+        <result column="solve_problem" property="solveProblem" />
+        <result column="audit_state" property="auditState" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no, user_unique_code, category_id, course_id, recommend_code, recommend_teacher_id, recommend_mobile, recommend_user_id, lecture_id, realize_channel, audition_counts, solve_problem, audit_state, create_time, update_time
+    </sql>
+
+</mapper>

@@ -1,0 +1,29 @@
+gupao:
+  nacos:
+    host: 47.93.233.188
+    port: 20010
+    namespace: 6aa34e12-881e-4d0f-9e00-bbe49f968a89
+spring:
+  application:
+    name: gupao-answer
+  cloud:
+    nacos:
+      #服务发现
+      discovery:
+        #注册中心地址
+        server-addr: ${gupao.nacos.host}:${gupao.nacos.port}
+        #实例名
+        service: gupao-answer
+        namespace: ${gupao.nacos.namespace}
+      #配置中心
+      config:
+        #配置中心地址
+        server-addr: ${gupao.nacos.host}:${gupao.nacos.port}
+        #文件格式
+        file-extension: yml
+        #命名空间
+        namespace: ${gupao.nacos.namespace}
+#feign使用sentinel进行fallback
+feign:
+  sentinel:
+    enabled: true

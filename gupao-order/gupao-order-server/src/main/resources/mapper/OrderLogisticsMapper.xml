@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.order.server.mapper.OrderLogisticsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.order.client.entity.OrderLogistics">
+        <id column="id" property="id" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="order_no" property="orderNo" />
+        <result column="logistics_no" property="logisticsNo" />
+        <result column="logistics_channel" property="logisticsChannel" />
+        <result column="user_address_id" property="userAddressId" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="receiver_mobile" property="receiverMobile" />
+        <result column="logistics_fees" property="logisticsFees" />
+        <result column="sender_id" property="senderId" />
+        <result column="sender_name" property="senderName" />
+        <result column="sender_address" property="senderAddress" />
+        <result column="sender_mobile" property="senderMobile" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="track_company_code" property="trackCompanyCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_unique_code, order_no, logistics_no, logistics_channel, user_address_id, receiver_name, receiver_mobile, logistics_fees, sender_id, sender_name, sender_address, sender_mobile, create_time, update_time
+    </sql>
+
+</mapper>

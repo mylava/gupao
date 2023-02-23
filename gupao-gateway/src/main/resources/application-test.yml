@@ -1,0 +1,78 @@
+gupao:
+  sentinel:
+    host: 47.93.233.188
+    port: 9090
+server:
+  port: 18001
+#暂时暴露全部端点，生产环境应该选择一部分暴露
+management.endpoints.web.exposure.include: '*'
+spring:
+  cloud:
+#============== sentinel ===================
+    #限流
+    sentinel:
+      #sentinel控制台地址
+      transport:
+        dashboard: ${gupao.sentinel.host}:${gupao.sentinel.port}
+      #取消Sentinel控制台懒加载
+      eager: true
+      datasource:
+        #自己定义的datasource名称
+        flow:
+          #使用nacos作为数据源
+          nacos:
+            server-addr: ${gupao.nacos.host}:${gupao.nacos.port}
+            dataId: ${spring.application.name}-flow-rules
+            namespace: ${gupao.nacos.namespace}
+            groupId: DEFAULT_GROUP
+            rule-type: flow
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: gupao-lotus
+        # 目标的uri lb代表从注册中心获取服务，且以负载均衡方式转发
+        uri: lb://gupao-lotus
+        predicates:
+        - Path=/lotus/**
+        filters:
+        - StripPrefix=1
+      - id: gupao-account
+        uri: lb://gupao-account
+        predicates:
+        - Path=/account/**
+        filters:
+        - StripPrefix=1
+      - id: gupao-answer
+        uri: lb://gupao-answer
+        predicates:
+        - Path=/answer/**
+        filters:
+        - StripPrefix=1
+      - id: gupao-course
+        uri: lb://gupao-course
+        predicates:
+        - Path=/course/**
+        filters:
+        - StripPrefix=1
+      - id: gupao-marketing
+        uri: lb://gupao-marketing
+        predicates:
+        - Path=/marketing/**
+        filters:
+        - StripPrefix=1
+      - id: gupao-order
+        uri: lb://gupao-order
+        predicates:
+        - Path=/order/**
+        filters:
+        - StripPrefix=1
+#============== logging ===================
+logging:
+  level:
+    com.alibaba.nacos: error
+    org.springframework.cloud.sleuth: debug
+token:
+  skips:
+  - /account/login

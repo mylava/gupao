@@ -1,0 +1,47 @@
+gupao:
+  nacos:
+    host: 47.93.233.188
+    port: 20010
+    namespace: 6aa34e12-881e-4d0f-9e00-bbe49f968a89
+spring:
+  application:
+    name: gupao-lotus
+  cloud:
+    nacos:
+      #服务发现
+      discovery:
+        #注册中心地址
+        server-addr: ${gupao.nacos.host}:${gupao.nacos.port}
+        #实例名
+        service: gupao-lotus
+        namespace: ${gupao.nacos.namespace}
+      #配置中心
+      config:
+        #配置中心地址
+        server-addr: ${gupao.nacos.host}:${gupao.nacos.port}
+        #文件格式
+        file-extension: yml
+        #命名空间
+        namespace: ${gupao.nacos.namespace}
+#feign使用sentinel进行fallback
+feign:
+  sentinel:
+    enabled: true
+
+alipay:
+  appId: 2016101900719854
+  privateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCOLTz6whKLiKk1oNewZA5GONB6tfv2rD2FX6UFgv0i+4GHJAib2KNm6CkJJF2hVo/dnQ+ERPSBmoc6WXlC7EXT2n77tai0d2IaxPLuKnIrbooXEua6H63cUc9oStGQreLRSpgHd0G8N87mRnTCOEdnFnrU16ywK6HaR0ld4ygXT0pDHtd0wCY5LHAfcLuzqJOqH3tjZrZVL0QOlZfB3Vu2Q0nUKsmmhOKSQo0CpFlRssga+Ly8RY4lLwD3aW4STnyLdx2xzlhwCZmGh2ygf0yXwZF59ZdfVgOxItDA4Ac86d/2eVNUDP9Kg5odJSphdFlAr7C6tIQgG/UircO3oT9hAgMBAAECggEACZ6B661Jt+sNF7XEIgkC9jlN0Z+SZoQMvYNVFORh4AYII26KrpCfrYyzigzN0OacYTAJJrfLmyErWQVIsQBvUQANa1ZFDcCuAIWmsfppMwsNiLYcqicOikN2tuWo/BLnr6VOV+L3rZZRBz9pEuLf4dehg9j7tAefsbb0/ccqpTj7hX9NTeVSFYoWtKIzSVqHjQoedYPkcqgaxE5Z0JSo94id8Vk1BqdgN33mm0GFy+hsQcgE2ClUWbyD4Bw2cw+5XQCFtv7S65cfE8cIBaAYYUdHmGZtMDLFDh/N2+GObtY0MCH1oQA4iCnq5VRb51Z0nYJKAH2Eo8lFHfiIb2H1aQKBgQDzZYvWVhgOHZ5OWzwR5CwEOBac7DrzHaAI2ihpOmQ8z4KH8MtQSrPtr4uk9+wC/va27G8KykBXUYhQz9bW65IieB71QL+0K5HfMO8jiD6YGDUKb+qm0FFhNxOYoPmjhOFAfBrJl3G82OzVj4W2BIRa/mDQUc0oB9s5QDNbtj0GwwKBgQCViezpCFWmFnboc3Bd2yjoJv9QV2ViiSp1Q1+MlaYQr+2XKm/ZcFjQ7IXTTkNrXzFgYiM8YphLjNE0N7vICaB/rWPHeTl8hXnEjzV0IKzmw7JaBh2N6PkD4gyuCf6BQcEWR1KK85RbtbDrKgOcy6ddS0M+AxXx5riKgbu9V/jnCwKBgQCcEYX8FtJv4rAKoFfBRSSwQ+LEFnmqQFnIs1JsPwPdNlYFovJLdssu4nxReKN+PEyoeKyvJ4bgNqiI4OxqfT0EGzAGpNEHz1RG4BLHHuq8DfGc0qyM8FDuXCmVmcrY/jCNb8ahcxl8NUCPo+riDr1rt2cOzRUW0QrSCAemjBFPjwKBgGFgyMLTZ5rZZCNpERI9Zj0PMBFsaBwrgFeOQQl2ZgbV2Z0nyGBLNbsPWvJIM8UW3zuJjLKE7fG8yHr9lC3mfvrFuYUrHtFExg/GxiNSJ+W6KElRVCuWO5pYuLMY1P/tBsTwOwM7LTAvd/8bg/C1+c3Z9fbK4Z5+BUxEwTHCuNYTAoGAW+sqOmcn6BW9POaEUdNshTyZpHYchD8UEhPZwO6bCkVgGZ/IJbE2dFeWvoje/AFY530inQFn2kRE1jHxb7+WJ1cTlnBvKiv8XSvXaxLd6ADYUSQPkkwGuOg9WgmM+Cj8iougy/2+x5n3c8b2r0XAiJ4XNozB1eXkM//g0yXT3/0=
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA06PJA2W0dKx2n3mdhlyUVRzFhvXsMar0eyU57bpf49DYvrsDZtNquvJb3/CGu6id5K6W6NoIDj7rwJPqeH9npFXh6c0M9p6hU4uZt0ZHG4rj7w3T4WDDVXGxWwBODogihZg/jJjXQhmoQ0GU0+IM08KiG3keHmmfg+enuUlpK3+jRsgVGuljNMZ2BSvtdwu67aPo8di2HqZmbTEvmEaIH3oNOr34sEVft+1AT+FDR2fUUxBe4HJawRyJw6+ePw532SrNREAzvnxCiDDCDo/SA34/ieS2sBixVbtUnrTpNx0RXHmhuYuSbNSPIwXl4AgLkrB7JL2nHKjqPU+D3zvJHwIDAQAB
+  charset: utf-8
+  serviceUrl: https://openapi.alipay.com/gateway.do
+  signType: RSA2
+  notifyUrl: http://unknow
+
+wxpay:
+  appId: wx9f1fa58451efa9b2
+  merchantId: 1576040561
+  secrectKey: 6C766BFA3E7D91DEB64001CB49BE87C9
+  spbillCreateIp: 127.0.0.1
+  serviceUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
+  tradeType: APP
+  notifyUrl: http://unknow

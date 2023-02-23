@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.course.server.mapper.CourseVideoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.course.client.entity.CourseVideo">
+        <id column="id" property="id" />
+        <result column="grade_id" property="gradeId" />
+        <result column="title" property="title" />
+        <result column="duration" property="duration" />
+        <result column="view_num" property="viewNum" />
+        <result column="file_size" property="fileSize" />
+        <result column="audit_state" property="auditState" />
+        <result column="cloud_video_state" property="cloudVideoState" />
+        <result column="image_url" property="imageUrl" />
+        <result column="polyv_video_id" property="polyvVideoId" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, grade_id, title, duration, view_num, file_size, audit_state, cloud_video_state, image_url, polyv_video_id, create_user_id, update_user_id, create_time, update_time
+    </sql>
+
+</mapper>

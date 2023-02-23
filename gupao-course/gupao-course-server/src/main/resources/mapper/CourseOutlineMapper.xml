@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.course.server.mapper.CourseOutlineMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.course.client.entity.CourseOutline">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="course_id" property="courseId" />
+        <result column="title" property="title" />
+        <result column="sort" property="sort" />
+        <result column="video_or_live" property="videoOrLive" />
+        <result column="video_or_stream_id" property="videoOrStreamId" />
+        <result column="outline_level" property="outlineLevel" />
+        <result column="is_video" property="isVideo" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="on_try" property="onTry" />
+        <result column="try_time_start" property="tryTimeStart" />
+        <result column="try_time_end" property="tryTimeEnd" />
+        <result column="limit_time" property="limitTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, course_id, title, sort, video_or_live, video_or_stream_id, outline_level, is_video, create_user_id, update_user_id, on_try, try_time_start, try_time_end, limit_time, create_time, update_time
+    </sql>
+
+    <select id="getOutlineSimpleInfo" resultType="com.gupao.edu.course.client.resp.OutlineVedioVO">
+        Select
+          cv.duration as videoSize
+        from course_outline t
+        INNER join course_video cv on t.video_or_stream_id=cv.id
+        where t.id=#{outlineId}
+    </select>
+
+    <select id="listCourseOutlineTopLevel" resultType="com.gupao.edu.course.client.resp.CourseOutlineTreeResp">
+        select
+            co.id,
+            co.course_id as courseId,
+            co.parent_id as parentId,
+            co.sort as sort,
+            co.video_or_stream_id as videoOrStreamId,
+            co.outline_level as outlineLevel
+        from
+        course_outline co
+        where co.course_id=#{courseId}
+        and co.parent_id=0
+    </select>
+
+    <select id="listCourseOutlineAndVedioInfo" resultType="com.gupao.edu.course.client.resp.CourseOutlineTreeResp">
+       select
+            co.id,
+            co.course_id as courseId,
+            co.parent_id as parentId,
+            co.title as outlineName,
+            co.sort as sort,
+            co.outline_level as outlineLevel,
+            ucp.play_seconds as playSeconds,
+            ucp.video_seconds as videoSeconds
+        from
+        course_outline co left join user_course_progress ucp on co.id=ucp.course_outline_id
+        where  co.parent_id=#{parentOutlineId} and ucp.user_unique_code=#{userUniqueCode}
+    </select>
+    <!--获取当前课程下所有的大纲目录-->
+    <select id="listCourseOutLineLevel" resultType="com.gupao.edu.course.client.resp.OutLineResp">
+       select
+            co.id as chapterId,
+            co.title as chapterName,
+            co.parent_id as parentId,
+            co.sort as sort,
+            co.video_or_stream_id as chapterId,
+            co.outline_level as outlineLevel,
+            ucp.play_seconds as playSeconds,
+            ucp.video_seconds as videoSeconds
+        from
+        course_outline co inner join user_course_progress ucp on co.id=ucp.course_outline_id
+        where  co.parent_id=#{parentOutlineId} and ucp.user_unique_code=#{userUniqueCode}
+    </select>
+</mapper>

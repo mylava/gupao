@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.course.server.mapper.CourseHomeworkReplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.course.client.entity.CourseHomeworkReply">
+        <id column="id" property="id" />
+        <result column="course_homework_id" property="courseHomeworkId" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="lecturer_id" property="lecturerId" />
+        <result column="homework_reply_content" property="homeworkReplyContent" />
+        <result column="score" property="score" />
+        <result column="is_good" property="isGood" />
+        <result column="correct_status" property="correctStatus" />
+        <result column="correct" property="correct" />
+        <result column="correct_time" property="correctTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, course_homework_id, user_unique_code, lecturer_id, homework_reply_content, score, is_good, correct_status, correct, correct_time, create_time, update_time
+    </sql>
+
+    <select id="countGoodNum" resultType="int">
+        SELECT COUNT(0)
+        FROM `course_homework_reply` chr
+        WHERE chr.`is_good` = 1 AND chr.`course_homework_id` = #{courseHomeworkId}
+    </select>
+
+    <select id="countCommitNum" resultType="int">
+        SELECT COUNT(0)
+        FROM `course_homework_reply` chr
+        WHERE chr.`course_homework_id` = #{courseHomeworkId}
+    </select>
+
+    <select id="selectMyHomeworkByUserUniqueCode" resultType="com.gupao.edu.course.client.dto.MyHomeworkDTO">
+        SELECT chr.`id` id,chr.`course_homework_id` courseHomeworkId,c.`course_name` courseName,chr.`user_unique_code` userUniqueCode,
+        chr.`homework_reply_content` homeworkReplyContent,chr.`score` score,chr.`create_time` createTime,
+        ch.`course_outline_id` courseOutlineId,co.`title` courseOutlineName
+        FROM `course_homework_reply` chr
+        LEFT JOIN `course_homework` ch ON ch.`id` = chr.`course_homework_id`
+        LEFT JOIN `course_outline` co ON co.`id` = ch.`course_outline_id`
+        LEFT JOIN `course` c ON c.`id` = co.`course_id`
+        WHERE chr.`user_unique_code` = #{userUniqueCode}
+        ORDER BY chr.`id` DESC
+    </select>
+
+    <select id="selectReplyOrderNewestByHomeworkId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `course_homework_reply`
+        WHERE `course_homework_id` = #{courseHomeworkId}
+        ORDER BY `create_time`
+    </select>
+
+    <select id="selectReplyOrderScoreByHomeworkId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `course_homework_reply`
+        WHERE `course_homework_id` = #{courseHomeworkId}
+        ORDER BY `score`
+    </select>
+</mapper>

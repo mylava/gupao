@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.answer.server.dao.AskArticlesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.answer.server.entity.AskArticles">
+    <result column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="logo" property="logo" />
+        <result column="category_id" property="categoryId" />
+        <result column="title" property="title" />
+        <result column="summary" property="summary" />
+        <result column="content" property="content" />
+        <result column="views" property="views" />
+        <result column="collections" property="collections" />
+        <result column="comments" property="comments" />
+        <result column="supports" property="supports" />
+        <result column="status" property="status" />
+        <result column="device" property="device" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="opt_type" property="optType" />
+        <result column="istop" property="istop" />
+        <result column="top_at" property="topAt" />
+        <result column="editorType" property="editorType" />
+        <result column="mdcontent" property="mdcontent" />
+        <result column="open_area" property="openArea" />
+        <result column="oppositions" property="oppositions" />
+        <result column="article_type" property="articleType" />
+        <result column="confidential" property="confidential" />
+        <result column="draft" property="draft" />
+        <result column="source_id" property="sourceId" />
+        <result column="source_type" property="sourceType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        user_id, logo, category_id, title, summary, content, views, collections, comments, supports, status, device, created_at, updated_at, opt_type, istop, top_at, editorType, mdcontent, open_area, oppositions, article_type, confidential, draft, source_id, source_type
+    </sql>
+    <!--查询指定行数据-->
+    <select id="queryHomePageUnTop" resultType="com.gupao.edu.answer.server.entity.res.HomePageofArticleRes" parameterType="com.gupao.edu.answer.server.entity.req.HomePageofArticleReq">
+        select
+        id, title, summary,  views, collections
+        from ask_articles t1
+        where t1.opt_type = 0 and t1.draft = 0 and t1.confidential = 0
+        <if test="null != tagIdList">
+            AND t1.category_id in
+            <foreach collection="tagIdList" item="item" open="(" separator="," close=")">
+                #{item,jdbcType=INTEGER}
+            </foreach>
+            )
+        </if>
+        <if test="null!=openArea">
+            AND t1.open_area = #{openArea,jdbcType=VARCHAR}
+        </if>
+        <if test='orderBy == "new"'>
+            ORDER BY  t1.created_at desc,t1.views desc
+        </if>
+        <if test='orderBy == "hot"'>
+            ORDER BY  t1.views desc,t1.created_at desc
+        </if>
+
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryHomePageTop" resultType="com.gupao.edu.answer.server.entity.res.HomePageofArticleRes" parameterType="com.gupao.edu.answer.server.entity.req.HomePageofArticleReq">
+        select
+        id, title, summary,  views, collections
+        from ask_articles t1
+        where t1.opt_type = 0 and t1.draft = 0 and t1.confidential = 0
+        <if test="null != tagIdList">
+            AND t1.category_id in
+            <foreach collection="tagIdList" item="item" open="(" separator="," close=")">
+                #{item,jdbcType=INTEGER}
+            </foreach>
+            )
+        </if>
+        <if test="null!=openArea">
+            AND t1.open_area = #{openArea,jdbcType=VARCHAR}
+        </if>
+        <if test='orderBy == "new"'>
+            ORDER BY  t1.created_at desc,t1.views desc
+        </if>
+        <if test='orderBy == "hot"'>
+            ORDER BY  t1.views desc,t1.created_at desc
+        </if>
+
+    </select>
+    <!--通过主键修改数据-->
+    <update id="updateArticlesInfo" parameterType="java.util.Map">
+        update ask_articles set
+        <if test='null != userId '>
+            user_id= #{userId,jdbcType = INTEGER},
+        </if>
+        <if test='type== "delete" '>
+            opt_type= 0,
+        </if>
+        <if test='type== "move" '>
+            category_id=#{categoryId,jdbcType=INTEGER},
+        </if>
+        <if test='type== "audit" '>
+            status = 1,
+        </if>
+        <if test='type== "forbidden" '>
+            status = -1,
+        </if>
+        <if test='type== "views" '>
+            views = views+1,
+        </if>
+        <if test='type== "comments" '>
+            comments = comments+1,
+        </if>
+        <if test='type== "commentsD" '>
+            comments = case WHEN comments > 0 THEN comments-1
+            else 0
+            end,
+        </if>
+        <if test='type== "top" '>
+            istop = 1,top_at = now(),
+        </if>
+        <if test='type== "topD" '>
+            istop = 0,top_at = null,
+        </if>
+        <if test='type== "supports" '>
+            supports = supports+1,
+        </if>
+        <if test='type== "supportsD" '>
+            supports = case WHEN supports > 0 THEN supports-1
+            else 0
+            end,
+        </if>
+        <if test='type== "collections" '>
+            collections = collections+1,
+        </if>
+        <if test='type== "collectionsD" '>
+            collections = case WHEN collections > 0 THEN collections-1
+            else 0
+            end,
+        </if>
+        <if test='type== "oppositions" '>
+            oppositions = oppositions+1,
+        </if>
+        updated_at = now()
+        where id = #{id}
+    </update>
+    <select id="tagList" resultType="java.lang.String" parameterType="java.lang.String">
+        select tag.name from ask_taggables tab , ask_tags tag where tab.tag_id = tag.id and tab.taggable_id = #{0} and tab.taggable_type = 'App\Models\Article'
+    </select>
+</mapper>

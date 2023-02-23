@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.account.server.mapper.UserInfoDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.account.client.entity.UserInfoDetail">
+        <id column="id" property="id" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="user_name" property="userName" />
+        <result column="title" property="title" />
+        <result column="grade_ids" property="gradeIds" />
+        <result column="birthday" property="birthday" />
+        <result column="gender" property="gender" />
+        <result column="work_city" property="workCity" />
+        <result column="province_id" property="provinceId" />
+        <result column="city_id" property="cityId" />
+        <result column="education" property="education" />
+        <result column="qq" property="qq" />
+        <result column="wechat" property="wechat" />
+        <result column="employer" property="employer" />
+        <result column="seniority" property="seniority" />
+        <result column="job_title" property="jobTitle" />
+        <result column="current_salary" property="currentSalary" />
+        <result column="expect_salary" property="expectSalary" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_unique_code, user_name, title, grade_ids, birthday, gender, work_city, province_id, city_id, education, qq, wechat, employer, seniority, job_title, current_salary, expect_salary, create_time, update_time
+    </sql>
+
+    <!--获取 用户 详情 -->
+    <select id="getUserInfo" resultType="com.gupao.edu.account.client.resp.UserInfoResp">
+		select
+            u.*,u.avatar as avatar,
+            u.nick_name as nickName,
+            uid.user_name as realName,
+            uid.gender as gender,
+          dict.id as province,
+           dict2.id as city,
+            uid.education as education,
+         dict3.dict_value as certificate,
+            uid.introduction as description,
+            uid.employer as company,
+            uid.seniority as workAge,
+			      dict4.dict_value as position,
+            uid.current_salary as currentSalary,
+            uid.expect_salary as expectSalary,
+			uid.birthday as birthday
+        from user u left join user_info_detail uid on u.user_unique_code = uid.user_unique_code
+        left join area dict on dict.id = uid.province_id
+        left join area dict2 on dict2.id = uid.city_id
+        left join dict dict3 on dict3.category_id = uid.education
+		left join dict dict4 on dict4.category_id = uid.job_title
+        where u.user_unique_code = #{userUniqueCode,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

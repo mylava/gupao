@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.order.server.mapper.OrderDetailsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.order.client.entity.OrderDetails">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="item_id" property="itemId" />
+        <result column="item_name" property="itemName" />
+        <result column="item_img" property="itemImg" />
+        <result column="price" property="price" />
+        <result column="cost" property="cost" />
+        <result column="buy_counts" property="buyCounts" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no, item_id, item_name, item_img, price, cost, buy_counts, create_time, update_time
+    </sql>
+
+
+    <select id="queryOrderDetails" parameterType="Map"  resultType="com.gupao.edu.order.client.vo.OrderListVO">
+        SELECT
+        os.order_no   AS orderNo,
+        os.success_time   AS successTime,
+        os.real_pay_amount AS realPayAmount,
+        os.pay_method  AS payMethod,
+        os.user_id  AS userId,
+        os.order_status  AS  orderStatus,
+        us.qq  AS qq,
+        us.mobile  AS  mobile,
+        us.nick_name  AS nickName,
+        od.vip_course_type AS vipCourseType,
+        od.item_id AS itemId,
+        od.item_type AS  itemType
+        FROM  orders   os
+        LEFT JOIN  gp_user us  on os.user_id=us.id
+        LEFT JOIN   order_details   od
+        on  os.id =od.order_id
+        where   1=1 and os.is_delete=0
+        and os.id = #{paramsMap.orderNo}
+         and us.id = #{paramsMap.userId}
+    </select>
+
+</mapper>

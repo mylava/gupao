@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.course.server.mapper.CourseHomeworkMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.course.client.entity.CourseHomework">
+        <id column="id" property="id" />
+        <result column="course_outline_id" property="courseOutlineId" />
+        <result column="grade_id" property="gradeId" />
+        <result column="title" property="title" />
+        <result column="lecturer_id" property="lecturerId" />
+        <result column="content" property="content" />
+        <result column="version" property="version" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, course_outline_id, grade_id, title, lecturer_id, content, version, is_deleted, create_time, update_time
+    </sql>
+
+    <select id="selectCourseHomeworkListByOutlineId" parameterType="Integer" resultType="com.gupao.edu.course.client.dto.CourseHomeworkDTO">
+        SELECT ch.`id` homeworkId,c.`course_name` courseName, co.`title` outlineName,ch.`create_time` createTime
+        FROM `course_homework` ch
+        LEFT JOIN `course_outline` co ON co.`id` = ch.`course_outline_id`
+        LEFT JOIN `course` c ON c.`id` = co.`course_id`
+        WHERE ch.`course_outline_id` = 	#{outlineId}
+        ORDER BY ch.`id` DESC
+    </select>
+
+    <select id="selectHomeworkDetailById" resultType="com.gupao.edu.course.client.dto.HomeworkDetailDTO">
+        SELECT ch.`title` homeworkTitle,co.`title` courseOutLineName,ch.`content` homeworkContext,ch.`create_time` createTime
+        FROM `course_homework` ch
+        LEFT JOIN `course_outline` co ON co.`id` = ch.`course_outline_id`
+        WHERE ch.`id` = #{id}
+    </select>
+
+</mapper>

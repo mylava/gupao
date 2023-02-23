@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>gupao-common</module>
+        <module>gupao-account/gupao-account-client</module>
+        <module>gupao-account/gupao-account-server</module>
+        <module>gupao-answer/gupao-answer-client</module>
+        <module>gupao-answer/gupao-answer-server</module>
+        <module>gupao-course/gupao-course-client</module>
+        <module>gupao-course/gupao-course-server</module>
+        <module>gupao-marketing/gupao-marketing-client</module>
+        <module>gupao-marketing/gupao-marketing-server</module>
+        <module>gupao-order/gupao-order-client</module>
+        <module>gupao-order/gupao-order-server</module>
+        <module>gupao-lotus/gupao-lotus-client</module>
+        <module>gupao-lotus/gupao-lotus-server</module>
+        <module>gupao-reverse</module>
+        <module>gupao-gateway</module>
+    </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.13.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.gupao.edu</groupId>
+    <artifactId>gupao-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+        <spring-boot.version>2.1.10.RELEASE</spring-boot.version>
+        <spring-cloud-alibaba.version>2.1.1.RELEASE</spring-cloud-alibaba.version>
+        <spring-cloud.version>Greenwich.SR5</spring-cloud.version>
+        <sentinel.version>1.7.0</sentinel.version>
+        <nacos.client.version>1.1.4</nacos.client.version>
+        <nacos.config.version>0.8.0</nacos.config.version>
+        <knife4j.version>2.0.0</knife4j.version>
+        <jmockit.version>1.44</jmockit.version>
+        <mysql-connector.version>8.0.15</mysql-connector.version>
+        <druid-spring-boot-starter.version>1.1.20</druid-spring-boot-starter.version>
+        <com-alibaba-druid.version>1.1.9</com-alibaba-druid.version>
+        <mybatis-plus.version>3.1.0</mybatis-plus.version>
+        <freemarker.version>2.3.28</freemarker.version>
+        <elasticsearch.version>7.3.0</elasticsearch.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <fastjson.version>1.2.35</fastjson.version>
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <jwt.version>3.8.1</jwt.version>
+        <bouncycastle.version>1.64</bouncycastle.version>
+        <joda-time.version>2.10.5</joda-time.version>
+        <spring-kafka.version>2.2.6.RELEASE</spring-kafka.version>
+        <dingxiang.version>2.1</dingxiang.version>
+        <alipay.version>4.9.79.ALL</alipay.version>
+        <guava.version>22.0</guava.version>
+        <xml.version>1.1.3.1</xml.version>
+        <xstream.version>1.4.9</xstream.version>
+        <xpp3.version>1.1.6</xpp3.version>
+
+        <gupao-parent.version>1.0-SNAPSHOT</gupao-parent.version>
+        <gupao-account.version>1.0-SNAPSHOT</gupao-account.version>
+        <gupao-answer.version>1.0-SNAPSHOT</gupao-answer.version>
+        <gupao-common.version>1.0</gupao-common.version>
+<!--        <gupao-common.version>1.0-SNAPSHOT</gupao-common.version>-->
+        <gupao-course.version>1.0-SNAPSHOT</gupao-course.version>
+        <gupao-lotus.version>1.0-SNAPSHOT</gupao-lotus.version>
+        <gupao-marketing.version>1.0-SNAPSHOT</gupao-marketing.version>
+        <gupao-order.version>1.0-SNAPSHOT</gupao-order.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--spring-cloud-dependencies-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--spring-boot-dependencies-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--spring-cloud-alibaba-dependencies-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--knife4j-spring-boot-starter-->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
+            <!--jmockit-->
+            <dependency>
+                <groupId>org.jmockit</groupId>
+                <artifactId>jmockit</artifactId>
+                <version>${jmockit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!--mysql-connector-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+            <!--druid-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${com-alibaba-druid.version}</version>
+            </dependency>
+            <!--mybatis-plus-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <!-- mybatis plus 代码生成器依赖 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <!-- 代码生成器模板 -->
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+            </dependency>
+
+            <!--elasticsearch-rest-high-level-client-->
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+
+            <!-- collections -->
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+            <!--fastjson-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <!--javax.servlet-api-->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dingxiang-inc</groupId>
+                <artifactId>ctu-client-sdk</artifactId>
+                <version>${dingxiang.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${spring-kafka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>${alipay.version}</version>
+            </dependency>
+
+            <!-- xml解析 用于微信支付 -->
+            <dependency>
+                <groupId>xmlpull</groupId>
+                <artifactId>xmlpull</artifactId>
+                <version>${xml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>${xstream.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ogce</groupId>
+                <artifactId>xpp3</artifactId>
+                <version>${xpp3.version}</version>
+            </dependency>
+
+            <!-- guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>2.1.13.RELEASE</version>
+                    <executions>
+                        <execution>
+                            <!-- <goal>build-info</goal>这个是必须的，否则要求main方法 -->
+                            <goals>
+                                <goal>build-info</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- 下面这段如果不加则会出带时间戳的jar -->
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <target>${java.version}</target>
+                        <source>${java.version}</source>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+
+</project>

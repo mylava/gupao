@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.common.dict.mapper.DictMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.common.dict.entity.Dict">
+        <id column="id" property="id" />
+        <result column="category_code" property="categoryCode" />
+        <result column="category_id" property="categoryId" />
+        <result column="dict_name" property="dictName" />
+        <result column="dict_value" property="dictValue" />
+        <result column="description" property="description" />
+    </resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="DictList" type="com.gupao.edu.course.client.req.good.DictListReq">
+        <result column="dict_name" property="dictName" />
+        <result column="dict_value" property="dictValue" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, category_code, category_id, dict_name, dict_value, desc
+    </sql>
+
+    <select id="getValueByName" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+            dict_value
+        FROM dict
+        WHERE dict_name = #{name}
+        LIMIT 1
+    </select>
+    <select id="getDictValues"  resultType="com.gupao.edu.course.client.resp.good.DictValueResp">
+        SELECT
+            dict_name As dictName,
+            dict_value As dictValue
+        FROM dict
+        WHERE category_code = #{category_code}
+        AND category_id = #{category_id}
+    </select>
+
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.order.server.mapper.OrdersMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.order.client.entity.Orders">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="total_amount" property="totalAmount" />
+        <result column="real_pay_amount" property="realPayAmount" />
+        <result column="left_msg" property="leftMsg" />
+        <result column="order_state" property="orderState" />
+        <result column="pay_time" property="payTime" />
+        <result column="close_time" property="closeTime" />
+        <result column="success_time" property="successTime" />
+        <result column="channel_source" property="channelSource" />
+        <result column="third_order_no" property="thirdOrderNo" />
+        <result column="user_coupon_ids" property="userCouponIds" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no, user_unique_code, total_amount, real_pay_amount, left_msg, order_state, pay_time, close_time, success_time, channel_source, third_order_no, user_coupon_ids, is_deleted, create_time, update_time
+    </sql>
+
+
+    <update id="updateOrderInfo">UPDATE     orders
+        <trim prefix="set" suffixOverrides=",">
+            <if test="paramMap.isDeleted != null and paramMap.isDeleted  != '' ">is_deleted = #{paramMap.isDeleted },</if>
+            update_time = now(),
+        </trim> where order_no = #{paramMap.orderNo}   and user_unique_code=#{paramMap.userUniqueCode}
+    </update>
+
+
+    <resultMap id="BaseOrdersResultMap" type="com.gupao.edu.order.client.vo.OrderListVO">
+        <id column="orderNo" property="orderNo"/>
+        <result column="realPayAmount" property="realPayAmount"/>
+        <result column="createdTime" property="createdTime"/>
+        <result column="orderStatus" property="orderStatus"/>
+        <result column="itemName" property="itemName"/>
+
+        <collection property="detailsVOList"
+                    select="getOrderItems"
+                    column="orderNo"
+                    ofType="com.gupao.edu.order.client.vo.OrderListDetailsVO">
+            <result column="itemId" property="itemId"/>
+            <result column="itemName" property="itemName"/>
+            <result column="itemImg" property="itemImg"/>
+            <result column="buyCounts" property="buyCounts"/>
+            <result column="priceNormal" property="priceNormal"/>
+            <result column="priceDiscount" property="priceDiscount"/>
+        </collection>
+
+
+
+    </resultMap>
+
+    <select id="queryOrderList" resultMap="BaseOrdersResultMap" parameterType="map">
+
+        SELECT
+        os.order_no   AS orderNo,
+        os.real_pay_amount AS realPayAmount,
+        os.created_time  AS createdTime,
+        os.order_status  AS  orderStatus,
+        od.item_id AS itemId,
+        od.item_name AS itemName,
+        od.item_img AS itemImg,
+        od.price_discount AS priceDiscount,
+        od.price_normal AS priceNormal
+        FROM  orders   os
+        where   1=1 and os.is_delete=0  order by created_time
+
+        <if test="paramMap.orderNo != null and paramMap.orderNo != '' ">AND os.order_no = #{paramMap.orderNo}</if>
+        <if test="paramMap.orderStatus != null and paramMap.orderStatus !='' ">AND os.order_status = #{paramMap.orderStatus}</if>
+        <if test="paramMap.userId != null and paramMap.userId !='' ">AND os.user_id = #{paramMap.userId}</if>
+
+
+        <if test="queryOrdersListReq.orderStatus != null and queryOrdersListReq.orderStatus !='' ">AND os.order_status = #{queryOrdersListReq.orderStatus}</if>
+        <if test="queryOrdersListReq.payMethod != null and queryOrdersListReq.payMethod != '' "> AND os.pay_method = #{queryOrdersListReq.payMethod} </if>
+        <if test="queryOrdersListReq.orderId != null and queryOrdersListReq.orderId != '' ">AND os.order_id = #{queryOrdersListReq.orderId}</if>
+        <if test="queryOrdersListReq.successTimeBegin !=null and queryOrdersListReq.successTimeBegin !='' "> <![CDATA[ AND os.success_time>=STR_TO_DATE(#{queryOrdersListReq.successTimeBegin},'%Y-%m-%d %H:%i:%s')]]> </if>
+        <if test="queryOrdersListReq.successTimeEnd !=null and queryOrdersListReq.successTimeEnd !='' "> <![CDATA[ AND os.success_time<=STR_TO_DATE(#{queryOrdersListReq.successTimeEnd},'%Y-%m-%d %H:%i:%s')]]> </if>
+        <if test="queryOrdersListReq.vipCourseType != null and queryOrdersListReq.vipCourseType != '' "> AND  od.vip_course_type = #{queryOrdersListReq.vipCourseType}</if>
+        <if test="queryOrdersListReq.itemId != null and queryOrdersListReq.itemId != '' ">AND  od.item_id= = #{queryOrdersListReq.itemId}</if>
+        <if test="queryOrdersListReq.mobile != null and queryOrdersListReq.mobile != '' "> AND us.mobile = #{queryOrdersListReq.mobile} </if>
+        <if test="queryOrdersListReq.qq != null and queryOrdersListReq.qq != '' "> AND us.qq = #{queryOrdersListReq.qq} </if>
+        <if test="queryOrdersListReq.nickName != null and queryOrdersListReq.nickName != '' "> AND us.nick_name = #{queryOrdersListReq.nickName} </if>
+        <if test="queryOrdersListReq.itemType != null and queryOrdersListReq.itemType != '' "> AND od.item_type = #{queryOrdersListReq.itemType} </if>
+        <if test="queryOrdersListReq.itemName != null and queryOrdersListReq.itemName != '' "> AND od.item_name = #{queryOrdersListReq.itemName} </if>
+    </select>
+
+
+    <select id="getOrderItems" parameterType="String" resultType="com.gupao.edu.order.client.vo.OrderListDetailsVO">
+      select
+        oi.item_id as itemId,
+        oi.item_name as itemName,
+        oi.item_img as itemImg,
+        oi.buy_counts as buyCounts,
+        oi.price_discount as priceDiscount,
+        oi.price_normal as priceNormal
+      from
+        order_details oi
+      where
+        oi.order_no = #{orderNo}
+    </select>
+
+
+
+
+
+
+
+
+
+
+</mapper>

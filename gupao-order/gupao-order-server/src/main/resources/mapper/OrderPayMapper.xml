@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.order.server.mapper.OrderPayMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.order.client.entity.OrderPay">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="merchant_order_id" property="merchantOrderId" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="pay_method" property="payMethod" />
+        <result column="payment_state" property="paymentState" />
+        <result column="cost" property="cost" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_deleted" property="isDeleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no, merchant_order_id, user_unique_code, pay_method, payment_state, cost, create_time, update_time, is_deleted
+    </sql>
+
+</mapper>

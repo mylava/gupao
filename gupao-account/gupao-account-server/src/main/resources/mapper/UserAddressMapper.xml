@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.account.server.mapper.UserAddressMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.account.client.entity.UserAddress">
+        <id column="id" property="id" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="receiver" property="receiver" />
+        <result column="mobile" property="mobile" />
+        <result column="province" property="province" />
+        <result column="province_id" property="provinceId" />
+        <result column="city" property="city" />
+        <result column="city_id" property="cityId" />
+        <result column="county" property="county" />
+        <result column="county_id" property="countyId" />
+        <result column="address" property="address" />
+        <result column="is_default" property="isDefault" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_unique_code, receiver, mobile, province, province_id, city, city_id, county, county_id, address, is_default, is_deleted, create_time, update_time
+    </sql>
+
+    <select id="selectUserAddressList" resultType="com.gupao.edu.account.client.resp.AddressResp">
+        SELECT * FROM `user_address` ua
+        WHERE ua.`user_unique_code` = #{userUniqueCode}
+    </select>
+
+</mapper>

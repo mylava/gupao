@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.answer.server.dao.AskCategoriesMapper">
+
+    <select id="selectCategories" resultType="com.gupao.edu.answer.server.dto.CategoriesRes">
+        SELECT id, name, slug, sort, status, created_at createdAt,type
+        FROM ask_categories where opt_type = 1
+        <if test="null != types">
+            and (
+            <foreach collection="types" item="item" open="(" separator="or" close=")">
+                type LIKE "%"#{item,jdbcType=VARCHAR}"%"
+            </foreach>
+            )
+        </if>
+        AND status = #{status}
+        order by sort asc
+    </select>
+
+    <select id="selectHotTags" resultType="com.gupao.edu.answer.server.dto.TagsRes">
+        select t1.tag_id id,t2.name, count(*) total
+        from ask_taggables t1
+                 left join ask_tags t2 on t1.tag_id = t2.id
+        where t1.opt_type= 1 and t2.opt_type= 1
+        GROUP by t1.tag_id order by total desc
+    </select>
+
+    <select id="selectByCategoryId" resultType="com.gupao.edu.answer.server.dto.TagsRes">
+        SELECT t1.id,t2.categories_id categoriesId, t1.name,t1.category_id categoryId, t1.followers,count(*) total
+        FROM ask_categories_tags t2
+        left join ask_tags t1 on t1.id = t2.tags_id
+        where t1.opt_type = 1
+        <if test="null!=categoryId">
+            AND t2.categories_id = #{categoryId,jdbcType=INTEGER}
+        </if>
+        GROUP by t2.tags_id
+        ORDER BY total DESC
+    </select>
+</mapper>

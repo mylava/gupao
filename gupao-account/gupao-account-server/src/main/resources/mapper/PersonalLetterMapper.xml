@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.account.server.mapper.PersonalLetterMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.account.client.entity.PersonalLetter">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="from_unique_code" property="fromUniqueCode" />
+        <result column="target_unique_code" property="targetUniqueCode" />
+        <result column="message" property="message" />
+        <result column="is_read" property="isRead" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, from_unique_code, target_unique_code, message, is_read, is_deleted, create_time
+    </sql>
+
+    <!--查询的是 : 所有与当前用户有关的私信 parent_id 为0 表示顶级私信 -->
+    <select id="listPersonalLetters" resultType="com.gupao.edu.account.client.resp.PersonalLetterVO">
+         select
+            pl.from_unique_code oppositeUniqueCode,
+            u.nick_name oppositeName,
+            u.avatar oppositeAvatar,
+            pl.message lastSent,
+            pl.create_time lastSentTime
+        from personal_letter pl
+        left join  user u on pl.from_unique_code=u.user_unique_code
+        where pl.parent_id=0
+        and pl.target_unique_code=#{condition.userUniqueCode,jdbcType=VARCHAR}
+        order by pl.create_time desc
+    </select>
+    <!--<if test="condition.page != null and condition.pageNum != null">-->
+        <!--limit #{condition.page}, #{condition.pageNum}-->
+    <!--</if>-->
+
+    <!-- from_unique_code 发送者昵称 头像 对方-->
+    <!-- target_unique_code 接收者昵称 头像 我-->
+    <select id="listPersonalLetterDetail" resultType="com.gupao.edu.account.client.resp.PersonalLetterDetailVO">
+      (select
+            u2.nick_name as nickName,
+            u2.avatar as avatar,
+            u2.user_unique_code as userUniqueCode,
+            u1.nick_name as oppositeName,
+            u1.avatar as oppositeAvatar,
+            pl.from_unique_code as fromUniqueCode,
+            pl.message as message,
+            pl.is_image as isImage,
+            pl.create_time as sentTime
+        from personal_letter pl
+        left join user u1 on pl.from_unique_code = u1.user_unique_code
+        left join user u2 on pl.target_unique_code = u2.user_unique_code
+        where pl.from_unique_code=#{userUniqueCode,jdbcType=VARCHAR}
+        order by pl.create_time asc
+        )
+        union
+	(select
+            u2.nick_name as nickName,
+            u2.avatar as avatar,
+            u2.user_unique_code as userUniqueCode,
+            u1.nick_name as oppositeName,
+            u1.avatar as oppositeAvatar,
+            pl.from_unique_code as fromUniqueCode,
+            pl.message as message,
+            pl.is_image as isImage,
+            pl.create_time as sentTime
+        from personal_letter pl
+        left join user u1 on pl.from_unique_code = u1.user_unique_code
+        left join user u2 on pl.target_unique_code = u2.user_unique_code
+        where pl.target_unique_code=#{userUniqueCode,jdbcType=VARCHAR}
+         order by pl.create_time asc
+        )
+    </select>
+
+    <update id="batchUpdate">
+        update personal_letter set is_read=#{readStatus}
+        where from_unique_code=#{oppositeUniqueCode,jdbcType=VARCHAR} and target_unique_code=#{userUniqueCode,jdbcType=VARCHAR}
+    </update>
+    
+</mapper>

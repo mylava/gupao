@@ -1,0 +1,98 @@
+gupao:
+  sentinel:
+    host: 47.93.233.188
+    port: 9090
+  redis:
+    host: 47.93.233.188
+    port: 6379
+  mysql:
+    host: 47.93.233.188
+    port: 3306
+  kafka:
+    host: 47.93.233.188
+    port: 9092
+server:
+  port: 18051
+#暂时暴露全部端点，生产环境应该选择一部分暴露
+management.endpoints.web.exposure.include: '*'
+spring:
+  cloud:
+    #============== sentinel ===================
+    #限流
+    sentinel:
+      #sentinel控制台地址
+      transport:
+        dashboard: ${gupao.sentinel.host}:${gupao.sentinel.port}
+      #取消Sentinel控制台懒加载
+      eager: true
+      datasource:
+        #自己定义的datasource名称
+        flow:
+          #使用nacos作为数据源
+          nacos:
+            server-addr: ${gupao.nacos.host}:${gupao.nacos.port}
+            dataId: ${spring.application.name}-flow-rules
+            namespace: ${gupao.nacos.namespace}
+            groupId: DEFAULT_GROUP
+            rule-type: flow
+  #============== redis ===================
+  redis:
+    host: ${gupao.redis.host}
+    port: ${gupao.redis.port}
+    #      password: mylava
+    database: 0
+  #============== mysql ===================
+  datasource:
+    # 配置数据源
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 使用druid连接池
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://${gupao.mysql.host}:${gupao.mysql.port}/gupao_backend?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=true&serverTimezone=UTC
+    username: root
+    password: 123456
+  #============== kafka ===================
+  #指定kafka server的地址，集群配多个，中间，逗号隔开
+  kafka:
+    bootstrap-servers: ${gupao.kafka.host}:${gupao.kafka.port}
+    #---------- producer ----------
+    producer:
+      #重发
+      retries: 0
+      #缓存消息发送数量阈值
+      batch-size: 16384
+      #缓存消息发送内存阈值
+      buffer-memory: 33554432
+      # 只需要leader节点返回ack
+      acks: 1
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #---------- consumer ----------
+    consumer:
+      group-id: ${spring.application.name}
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#============== mybatis-plus ===================
+mybatis-plus:
+  global-config:
+    db-config:
+      #ID类型为自增
+      id-type: auto
+      #字段非空检查
+      field-strategy: not_empty
+      table-underline: true
+      #      db-type: mysql
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+  mapper-locations: classpath:/mapper/*.xml
+  # 实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: com.gupao.edu.marketing.server.entity   #自己的实体类地址
+  configuration:
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#============== logging ===================
+logging:
+  level:
+    com.alibaba.nacos: error
+    org.springframework.cloud.sleuth: debug

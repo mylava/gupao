@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.account.server.mapper.MemberRightGainHistoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.account.client.entity.MemberRightGainHistory">
+        <id column="id" property="id" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="member_right_id" property="memberRightId" />
+        <result column="resource_id" property="resourceId" />
+        <result column="category_id" property="categoryId" />
+        <result column="category_code" property="categoryCode" />
+        <result column="member_id" property="memberId" />
+        <result column="user_address_id" property="userAddressId" />
+        <result column="delivery_state" property="deliveryState" />
+        <result column="logistics_no" property="logisticsNo" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_unique_code, member_right_id, resource_id, category_id, category_code, member_id, user_address_id, delivery_state, logistics_no, create_time, update_time
+    </sql>
+
+    <select id="selectGainHistoryList" resultType="com.gupao.edu.account.client.resp.GainHistoryResp">
+        SELECT DISTINCT d.`dict_name` rightName,mrr.`id` resourceId,mrr.`name` `name`,mrr.`summary` summary,mrr.`picture` picture,
+        mrgh.`delivery_state` deliveryState,mrgh.`logistics_no` logisticsNo,mrgh.`create_time` receiveTime,
+        ua.`receiver` receiver,ua.`mobile` mobile,ua.`province` province,ua.`city` city,ua.`county` county,ua.`address` address
+        FROM `member_right_gain_history` mrgh
+        LEFT JOIN `dict` d ON d.`id` = mrgh.`member_right_id`
+        LEFT JOIN `member_right_resource` mrr ON mrr.`id` = mrgh.`resource_id`
+        LEFT JOIN `user_address` ua ON ua.`id` = mrgh.`user_address_id`
+        WHERE mrgh.`user_unique_code` = #{userUniqueCode}
+    </select>
+
+</mapper>

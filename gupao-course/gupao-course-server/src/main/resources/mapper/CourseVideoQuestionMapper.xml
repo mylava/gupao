@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gupao.edu.course.server.mapper.CourseVideoQuestionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gupao.edu.course.client.entity.CourseVideoQuestion">
+        <id column="id" property="id" />
+        <result column="user_unique_code" property="userUniqueCode" />
+        <result column="video_id" property="videoId" />
+        <result column="point" property="point" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="reply_count" property="replyCount" />
+        <result column="browse_count" property="browseCount" />
+        <result column="audit_state" property="auditState" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_unique_code, video_id, point, title, content, reply_count, browse_count, audit_state, create_time, update_time
+    </sql>
+    <select id="findQuestionPage"
+        resultType="com.gupao.edu.course.client.resp.center.CourseQuestionResp">
+        select
+            id,
+            user_unique_code userUniqueCode,
+            video_id videoId,
+            point,
+            title,
+            content,
+            reply_count replyCount,
+            browse_count browseCount,
+            create_time createTime,
+            update_time updateTime
+        from
+            course_video_question
+        where
+            video_id = #{videoId}
+            <if test="userUniqueCode !=null and userUniqueCode !=''">
+                and user_unique_code = #{userUniqueCode}
+            </if>
+    </select>
+
+</mapper>
